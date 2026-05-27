@@ -25,6 +25,16 @@ echo  Repo   : %REPO%
 echo  Output : %BUILD%\%BIN%
 echo.
 
+REM Locate clang (required by frida-sys bindgen)
+where clang >nul 2>&1
+if errorlevel 1 (
+    echo  WARNING: clang not found in PATH.
+    echo  frida-sys requires LLVM to generate bindings.
+    echo  Install LLVM:  winget install LLVM.LLVM
+    echo  Then reopen this terminal so clang is on PATH.
+    echo.
+)
+
 REM Locate cargo
 where cargo >nul 2>&1
 if errorlevel 1 (

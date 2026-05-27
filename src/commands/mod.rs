@@ -1,0 +1,14 @@
+pub mod attach;
+pub mod classes;
+pub mod devices;
+pub mod discover;
+pub mod explain;
+pub mod generate;
+pub mod kill;
+pub mod memory;
+pub mod ps;
+pub mod repl;
+pub mod rpc;
+pub mod scripts;
+pub mod spawn;
+pub mod trace;
