@@ -6,10 +6,6 @@ mod script;
 mod scripts;
 
 use clap::{Args, Parser, Subcommand};
-use frida::Frida;
-use std::sync::LazyLock;
-
-pub static FRIDA: LazyLock<Frida> = LazyLock::new(|| unsafe { Frida::obtain() });
 
 #[derive(Parser)]
 #[command(name = "lancer-frida", version, about = "Dynamic instrumentation toolkit")]

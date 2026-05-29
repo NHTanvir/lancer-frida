@@ -1,14 +1,14 @@
-use crate::{
-    device::{get_device, resolve_pid},
-    DeviceArgs, FRIDA,
-};
-use frida::DeviceManager;
+use crate::DeviceArgs;
+use crate::device::device_flags;
+use std::process::Command;
 
 pub fn run(args: &DeviceArgs, target: &str) -> anyhow::Result<()> {
-    let manager = DeviceManager::obtain(&FRIDA);
-    let mut device = get_device(&manager, args)?;
-    let pid = resolve_pid(&device, target)?;
-    device.kill(pid)?;
-    println!("Killed '{}' (pid {})", target, pid);
+    let status = Command::new("frida-kill")
+        .args(device_flags(args))
+        .arg(target)
+        .status()?;
+    if !status.success() {
+        anyhow::bail!("frida-kill exited with {}", status);
+    }
     Ok(())
 }
