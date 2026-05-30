@@ -5,9 +5,14 @@ Rust CLI wrapping the Frida dynamic instrumentation engine. Part of the Lancer e
 ## Quick start
 
 ```
-setup.bat          # install Rust + LLVM (Windows, one-time)
+setup.bat          # install Rust + Frida tools (Windows, one-time)
 build.bat          # build → build\lancer-frida.exe
 ```
+
+> **Runtime dependency.** `lancer-frida` delegates the actual instrumentation
+> to the upstream Frida engine, so the Frida tools must be on `PATH`:
+> `pip install frida-tools` (provides `frida`, `frida-ps`, `frida-trace`,
+> `frida-ls-devices`, `frida-kill`, etc.). `setup.bat` does this for you.
 
 ## Commands
 
@@ -51,7 +56,26 @@ SCRIPT LIBRARY
 AI
   generate <goal> [-o FILE]               Generate Frida script with Claude
   explain  [FILE] [-e ERROR]              AI script diagnosis and fix
+  summarize [FILE]                        Summarize a trace/log into plain English
+  synth <defense> [-o FILE]               Synthesize a bypass for a described defense
+  fuzz  [FILE] [-n N]                     Generate malformed fuzz seeds from inputs
+  library <query>                         Semantic search over the script library
+  evade <symptom> [-o FILE]               Suggest the next anti-detection layer
+  art-update <android_ver> [FILE]         Adapt a failing Java hook to a newer ART
+
+DELEGATED TOOLS (full upstream-flag parity; args forwarded verbatim)
+  ls-devices | pull | push | rm | ls | mkdir | rmdir | mv
+  apk | create | compile | pm | join | itrace | inject | portal | graft | strace
+
+GUI / MODES
+  (no subcommand)                          Launch the native GUI window
+  --cli                                    Force the CLI surface (skip the GUI)
+  --self-test                              Run the upstream parity matrix
 ```
+
+Every subcommand is also available as a standalone companion binary named
+`lancer-frida-<tool>` (e.g. `lancer-frida-ps`, `lancer-frida-trace`,
+`lancer-frida-strace`, `lancer-frida-cli`).
 
 ## Bundled Scripts
 
@@ -62,6 +86,11 @@ AI
 | `biometric-bypass` | Bypass biometric authentication                     |
 | `http-trace`       | Trace HTTP/HTTPS traffic                            |
 | `anti-detect`      | Hide Frida from anti-debug/anti-Frida detection     |
+| `cert-pin-dump`    | Dump configured OkHttp CertificatePinner pins       |
+| `deobfuscate`      | Reveal obfuscated/decrypted strings at runtime      |
+| `auth-headers`     | Log every HTTP auth/custom header                   |
+| `protobuf-capture` | Capture protobuf/gRPC payloads                      |
+| `rasp-bypass`      | Neutralize common RASP runtime checks               |
 
 ## Examples
 
@@ -102,7 +131,7 @@ lancer-frida explain hook.js -e "TypeError: Cannot read property 'implementation
 
 ### Windows
 ```
-setup.bat    # installs Rust + LLVM (once)
+setup.bat    # installs Rust + Frida tools (once)
 build.bat    # → build\lancer-frida.exe
 ```
 
@@ -117,8 +146,13 @@ build-windows.bat   # → dist\lancer-frida-windows-x86_64\bin\lancer-frida.exe
 ```
 
 ## Requirements
+
+**Build time**
 - [Rust / Cargo](https://rustup.rs)
-- [LLVM](https://releases.llvm.org/) — required by `bindgen` for `frida-sys`  
-  Windows: `winget install LLVM.LLVM` (or run `setup.bat`)
 - (Windows) Visual C++ Build Tools 2019/2022
-- `ANTHROPIC_API_KEY` env var for `generate` and `explain` commands
+
+**Runtime**
+- Upstream Frida tools on `PATH`: `pip install frida-tools`
+  (provides `frida`, `frida-ps`, `frida-trace`, `frida-ls-devices`, `frida-kill`, …)
+- `ANTHROPIC_API_KEY` env var for the `generate`, `explain`, `discover --ai`,
+  `summarize`, `synth`, `fuzz`, and `library` commands

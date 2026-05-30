@@ -25,16 +25,6 @@ echo  Repo   : %REPO%
 echo  Output : %BUILD%\%BIN%
 echo.
 
-REM Locate clang (required by frida-sys bindgen)
-where clang >nul 2>&1
-if errorlevel 1 (
-    echo  WARNING: clang not found in PATH.
-    echo  frida-sys requires LLVM to generate bindings.
-    echo  Install LLVM:  winget install LLVM.LLVM
-    echo  Then reopen this terminal so clang is on PATH.
-    echo.
-)
-
 REM Locate cargo
 where cargo >nul 2>&1
 if errorlevel 1 (
@@ -72,6 +62,11 @@ echo    Done!  Binary ready:
 echo.
 echo    %BUILD%\%BIN%
 echo  ================================================
+echo.
+echo  Runtime dependency: the CLI delegates to the upstream Frida
+echo  tools. Install them once with:
+echo      pip install frida-tools
+echo  (provides frida, frida-ps, frida-trace, frida-ls-devices, etc.)
 echo.
 pause
 endlocal

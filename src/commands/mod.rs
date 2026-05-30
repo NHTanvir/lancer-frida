@@ -1,3 +1,4 @@
+pub mod ai_extra;
 pub mod attach;
 pub mod classes;
 pub mod devices;
@@ -11,4 +12,5 @@ pub mod repl;
 pub mod rpc;
 pub mod scripts;
 pub mod spawn;
+pub mod tools;
 pub mod trace;

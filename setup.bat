@@ -38,20 +38,23 @@ if errorlevel 1 (
     echo  [1/3]  Rust already installed.
 )
 
-REM ---- 2. LLVM (libclang for bindgen / frida-sys) ----
-where clang >nul 2>&1
+REM ---- 2. Frida tools (runtime dependency — the CLI delegates to them) ----
+where frida >nul 2>&1
 if errorlevel 1 (
-    echo  [2/3]  Installing LLVM (required by frida-sys bindgen)...
-    winget install --id LLVM.LLVM -e --silent
+    echo  [2/3]  Installing Frida tools (frida, frida-ps, frida-trace, ...)...
+    where pip >nul 2>&1
     if errorlevel 1 (
-        echo  ERROR: Failed to install LLVM. Visit https://releases.llvm.org/
-        pause
-        exit /b 1
+        echo         pip not found. Install Python 3.10+ then run: pip install frida-tools
+    ) else (
+        pip install --user frida-tools
+        if errorlevel 1 (
+            echo         WARNING: pip install frida-tools failed. Install manually: pip install frida-tools
+        ) else (
+            echo  [2/3]  Frida tools installed.
+        )
     )
-    echo  [2/3]  LLVM installed.
-    echo         IMPORTANT: Restart this terminal so clang/libclang.dll are on PATH.
 ) else (
-    echo  [2/3]  LLVM already installed.
+    echo  [2/3]  Frida tools already installed.
 )
 
 REM ---- 3. Visual C++ Build Tools ----

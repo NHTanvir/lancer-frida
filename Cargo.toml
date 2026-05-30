@@ -2,10 +2,32 @@
 name = "lancer-frida"
 version = "0.1.0"
 edition = "2021"
-description = "Rust clone of frida — part of the Lancer bug bounty toolkit"
+description = "Rust controller + native GUI over the Frida dynamic instrumentation engine — part of the Lancer bug bounty toolkit"
 authors = ["NHTanvir <naymulhasantanvir10@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/NHTanvir/lancer-frida"
+
+# Shared library: the CLI, every companion binary in src/bin/, and the GUI all
+# sit on top of this. (Crate name: `lancer_frida`.)
+[lib]
+name = "lancer_frida"
+path = "src/lib.rs"
+
+# Primary binary: GUI by default, CLI behind a subcommand / --cli.
+[[bin]]
+name = "lancer-frida"
+path = "src/main.rs"
+
+# Upstream parity tests (introspect the clap tree; no device/engine needed).
+[[test]]
+name = "upstream_parity"
+path = "tests/upstream_parity/main.rs"
+
+[features]
+default = ["gui"]
+# Native GUI frontend (eframe/egui). Disable with --no-default-features for a
+# smaller CLI-only build that does not pull the GUI dependency tree.
+gui = ["dep:eframe"]
 
 [dependencies]
 clap = { version = "4", features = ["derive"] }
@@ -16,6 +38,10 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 serde_json = "1"
 serde = { version = "1", features = ["derive"] }
 reqwest = { version = "0.12", features = ["blocking", "json"] }
+
+# GUI (optional, on by default). eframe re-exports egui, so the whole
+# immediate-mode UI stack comes from this single dependency.
+eframe = { version = "0.29", optional = true }
 
 [profile.release]
 opt-level = 3

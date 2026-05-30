@@ -1,0 +1,35 @@
+{
+  "description": "Upstream Frida parity matrix. Pins each upstream tool to its lancer-frida subcommand and records representative flag combinations. Instrumentation is delegated to the upstream engine (Path A), so parity here means: every tool is reachable and every upstream flag is forwarded.",
+  "frida_version_baseline": "17.9.8",
+  "tools": [
+    { "upstream": "frida",            "subcommand": "repl",       "delegated": true,  "sample_flags": ["-U", "-n com.app", "-f /usr/bin/foo", "-e <code>", "--no-pause"] },
+    { "upstream": "frida-ps",         "subcommand": "ps",         "delegated": true,  "sample_flags": ["-U", "-R host:port", "-a", "-i"] },
+    { "upstream": "frida-ls-devices", "subcommand": "ls-devices", "delegated": true,  "sample_flags": [] },
+    { "upstream": "frida-kill",       "subcommand": "kill",       "delegated": true,  "sample_flags": ["-U", "<pid|name>"] },
+    { "upstream": "frida-trace",      "subcommand": "trace",      "delegated": true,  "sample_flags": ["-U", "-i *ssl*", "-I libssl.so", "-a module!offset"] },
+    { "upstream": "frida-discover",   "subcommand": "discover",   "delegated": false, "sample_flags": ["-U", "-f keyword", "--ai", "--limit N"] },
+    { "upstream": "frida-pull",       "subcommand": "pull",       "delegated": true,  "sample_flags": ["-U", "REMOTE LOCAL"] },
+    { "upstream": "frida-push",       "subcommand": "push",       "delegated": true,  "sample_flags": ["-U", "LOCAL REMOTE"] },
+    { "upstream": "frida-rm",         "subcommand": "rm",         "delegated": true,  "sample_flags": ["-U", "PATH"] },
+    { "upstream": "frida-ls",         "subcommand": "ls",         "delegated": true,  "sample_flags": ["-U", "PATH"] },
+    { "upstream": "frida-mkdir",      "subcommand": "mkdir",      "delegated": true,  "sample_flags": ["-U", "PATH"] },
+    { "upstream": "frida-rmdir",      "subcommand": "rmdir",      "delegated": true,  "sample_flags": ["-U", "PATH"] },
+    { "upstream": "frida-mv",         "subcommand": "mv",         "delegated": true,  "sample_flags": ["-U", "SRC DST"] },
+    { "upstream": "frida-apk",        "subcommand": "apk",        "delegated": true,  "sample_flags": ["-o out.apk", "--gadget path", "in.apk"] },
+    { "upstream": "frida-create",     "subcommand": "create",     "delegated": true,  "sample_flags": ["-n name", "-o dir"] },
+    { "upstream": "frida-compile",    "subcommand": "compile",    "delegated": true,  "sample_flags": ["agent.ts", "-o out.js", "-w", "--platform linux", "--externals node:*", "--bundle"] },
+    { "upstream": "frida-pm",         "subcommand": "pm",         "delegated": true,  "sample_flags": ["search <q>", "install <pkg>", "remove <pkg>", "list", "upgrade"] },
+    { "upstream": "frida-join",       "subcommand": "join",       "delegated": true,  "sample_flags": ["-U", "host:port"] },
+    { "upstream": "frida-itrace",     "subcommand": "itrace",     "delegated": true,  "sample_flags": ["-U", "-n com.app"] },
+    { "upstream": "frida-inject",     "subcommand": "inject",     "delegated": true,  "sample_flags": ["-p PID", "-s script.js"] },
+    { "upstream": "frida-portal",     "subcommand": "portal",     "delegated": true,  "sample_flags": ["--cluster-endpoint", "--control-endpoint"] },
+    { "upstream": "gum-graft",        "subcommand": "graft",      "delegated": true,  "sample_flags": ["instrument <binary>", "--ingest"] },
+    { "upstream": "frida-strace",     "subcommand": "strace",     "delegated": true,  "sample_flags": ["-U com.app", "-f /usr/bin/foo", "--filter='open*,read*'"] }
+  ],
+  "feature_groups": [
+    "Process control", "Instrumentation", "Memory & introspection",
+    "File ops on target", "Agent tooling", "Portal & injection",
+    "Syscall tracing", "Script library", "AI augmentation"
+  ],
+  "backends": ["droidy", "darwin", "linux", "windows", "freebsd", "qnx", "fruity", "barebone", "simmy"]
+}
